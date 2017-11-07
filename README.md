@@ -84,7 +84,7 @@ fmt.Println(parsetime.Format(t, "H:i:s"))
 ```
 Will print
 ```
-"9:35:42"
+"09:35:42"
 ```
 
 ### Escaped characters
