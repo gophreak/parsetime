@@ -1,4 +1,4 @@
-#Parsetime
+# Parsetime
 
 The parsetime package is designed as a helper to get around the obscurity of Go's time parsing. Coming from a PHP
 background I find it easier to implement the standards laid out by PHP so I have created this helper to help when parsing
