@@ -123,6 +123,11 @@ In time zone will return the time.Time object passed as argument in the time zon
 is a helper method which does not require you to load the time.Location upfront and will work from a string representation
 of the timezone you wish to use.
 
+### ParseWithTimeZone
+
+Parse with time zone effectively runs the Parse and SetTimeZone functions to set a time and the timezone without modifying
+the underlying time parsed.
+
 ## Time manipulation examples
 
 ###  GetStartOfDay
@@ -173,4 +178,17 @@ Which would be the equivalent of doing:
 hkt, _ := time.LoadLocation("Hongkong")
 t := time.Date(2017, 9, 25, 18, 36, 45, 56, time.UTC)
 hkTime := t.In(hkt)
+```
+
+### ParseWithTimeZone
+
+To read a time into Johannesbur's timezone, without changing the parsed time:
+```
+t, _ := parsetime.ParseWithTimeZone("Y-m-d[T]H:i:s", "2017-11-24T08:39:15", southAfrica)
+```
+
+Should set `t` to the equivalent of:
+```
+saTZ, _ := time.LoadLocation("Africa/Johannesburg")
+t := time.Date(2017, 11, 24, 8, 39, 15, 0, saTZ)
 ```

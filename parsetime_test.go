@@ -200,3 +200,16 @@ func TestInTimeZone_SantiagoSummer(test *testing.T) {
 	assert.Equal(test, expected, actual)
 }
 
+func TestParseWithTimeZone(test *testing.T) {
+	southAfrica := "Africa/Johannesburg"
+	saTZ, e := time.LoadLocation(southAfrica)
+	if e != nil {
+		panic(e)
+	}
+
+	actual, e := parsetime.ParseWithTimeZone("Y-m-d[T]H:i:s", "2017-11-24T08:39:15", southAfrica)
+	expected := time.Date(2017,11, 24, 8, 39, 15, 0, saTZ)
+
+	assert.Nil(test, e)
+	assert.Equal(test, expected, actual)
+}
