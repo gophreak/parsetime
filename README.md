@@ -1,4 +1,4 @@
-#Parsetime
+# Parsetime
 
 The parsetime package is designed as a helper to get around the obscurity of Go's time parsing. Coming from a PHP
 background I find it easier to implement the standards laid out by PHP so I have created this helper to help when parsing
@@ -63,7 +63,7 @@ Samples of date can be found below:
 If you would like to escape reserved characters for use during the formatting, you can wrap it in `[]square brackets] to
 preserve the individual characters. See some examples below:
 
-## Examples
+## Format Examples
 
 Assuming a time of 24th July 2017, at 09:35:42
 ### Dates
@@ -98,4 +98,79 @@ fmt.Println(parsetime.Format(t, "[Time: ]Y-m-d[T]H:i:s"))
 Will print
 ```
 "Time: 2017-07-24T09:35:42"
+```
+
+## Time manipulation
+
+### GetStartOfDay
+
+Get start of day is a helper function designed to get midnight of the passed date. Useful for when you want to
+process from the beginning of a day, and are passed a time.Time object with a time already set.
+
+It takes as argument the time.Time object you wish to return the midnight off.
+
+### GetEndOfDay
+
+Get end of day is a helper function designed to get the the end time of the passed date. It will set the time to
+be 1ns to midnight of the following day, meaning you can confidently use it to process an entire day giving you
+a nano accuracy equivalent to `< t.addDate(0, 0, 1)` where `t` is the midnight of the date in question.
+
+It takes as argument the time.Time object you wish to return the end of day of.
+
+### InTimeZone
+
+In time zone will return the time.Time object passed as argument in the time zone of the time you pass through. It
+is a helper method which does not require you to load the time.Location upfront and will work from a string representation
+of the timezone you wish to use.
+
+## Time manipulation examples
+
+###  GetStartOfDay
+
+To get the start of the passed date, ie midnight, you can configure a time.Time object with any time set:
+
+```
+t := time.Date(2017, 10, 25, 18, 36, 45, 56, time.UTC)
+e := parsetime.GetStartOfDay(t)
+```
+
+Will set `e` to be equal to:
+```
+e := time.Date(2017, 10, 25, 0, 0, 0, 0, time.UTC)
+```
+
+###  GetEndOfDay
+
+To get the end of the passed date, ie midnight, you can configure a time.Time object with any time set:
+
+```
+t := time.Date(2017, 10, 25, 18, 36, 45, 56, time.UTC)
+e := parsetime.GetEndOfDay(t)
+```
+
+Will set `e` to be equal to:
+```
+e := time.Date(2017, 10, 25, 23, 59, 59, 999999999, time.UTC)
+```
+
+Hence adding 1 nanosecond `ns` to the time e, will give you midnight of the following day.
+
+```
+m := e.Add(time.Nanosecond)
+m === time.Date(2017, 10, 26, 0, 0, 0, 0, time.UTC)
+```
+
+### InTimeZone
+
+To return the time modified to the timezone, for example Hong Kong, you can use:
+```
+t := time.Date(2017, 9, 25, 18, 36, 45, 56, time.UTC)
+hkTime, tzErr := parsetime.InTimeZone(t, hongkongName)
+```
+
+Which would be the equivalent of doing:
+```
+hkt, _ := time.LoadLocation("Hongkong")
+t := time.Date(2017, 9, 25, 18, 36, 45, 56, time.UTC)
+hkTime := t.In(hkt)
 ```

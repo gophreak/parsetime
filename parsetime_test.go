@@ -78,3 +78,125 @@ func TestParse_WithRFC3339NegativeTimezone(test *testing.T) {
 	assert.NoError(test, e)
 	assert.Equal(test, int64(1511530755), t.Unix())
 }
+
+func TestGetStartOfDay(test *testing.T) {
+	t := time.Date(2017, 10, 25, 18, 36, 45, 56, time.UTC)
+	expected := time.Date(2017, 10, 25, 0, 0, 0, 0, time.UTC)
+	actual := parsetime.GetStartOfDay(t)
+	assert.Equal(test, expected, actual)
+}
+
+func TestGetEndOfDay(test *testing.T) {
+	t := time.Date(2017, 10, 25, 18, 36, 45, 56, time.UTC)
+	expected := time.Date(2017, 10, 25, 23, 59, 59, 999999999, time.UTC)
+	actual := parsetime.GetEndOfDay(t)
+	assert.Equal(test, expected, actual)
+	newExpected := time.Date(2017, 10, 26, 0, 0, 0, 0, time.UTC)
+	newActual := actual.Add(time.Nanosecond)
+	assert.Equal(test, newExpected, newActual)
+}
+
+func TestInTimeZone_UTC(test *testing.T) {
+	t := time.Date(2017, 10, 25, 18, 36, 45, 56, time.UTC)
+	expected := time.Date(2017, 10, 25, 18, 36, 45, 56, time.UTC)
+	actual, tzErr := parsetime.InTimeZone(t, "UTC")
+	assert.Nil(test, tzErr)
+	assert.Equal(test, expected, actual)
+}
+
+func TestInTimeZone_London(test *testing.T) {
+	var londonName = "Europe/London"
+	london, _ := time.LoadLocation(londonName)
+
+	t := time.Date(2017, 12, 25, 18, 36, 45, 56, time.UTC)
+	expected := time.Date(2017, 12, 25, 18, 36, 45, 56, london)
+	actual, tzErr := parsetime.InTimeZone(t, londonName)
+	assert.Nil(test, tzErr)
+	assert.Equal(test, expected, actual)
+}
+
+func TestInTimeZone_LondonBST(test *testing.T) {
+	var londonName = "Europe/London"
+	london, _ := time.LoadLocation(londonName)
+
+	t := time.Date(2017, 6, 25, 18, 36, 45, 56, time.UTC)
+	expected := time.Date(2017, 6, 25, 19, 36, 45, 56, london)
+	actual, tzErr := parsetime.InTimeZone(t, londonName)
+	assert.Nil(test, tzErr)
+	assert.Equal(test, expected, actual)
+}
+
+func TestInTimeZone_Paris(test *testing.T) {
+	var parisName = "Europe/Paris"
+	paris, _ := time.LoadLocation(parisName)
+
+	t := time.Date(2017, 9, 25, 18, 36, 45, 56, time.UTC)
+	expected := time.Date(2017, 9, 25, 20, 36, 45, 56, paris)
+	actual, tzErr := parsetime.InTimeZone(t, parisName)
+	assert.Nil(test, tzErr)
+	assert.Equal(test, expected, actual)
+}
+
+func TestInTimeZone_HongKong(test *testing.T) {
+	var hongkongName = "Hongkong"
+	hkt, _ := time.LoadLocation(hongkongName)
+
+	t := time.Date(2017, 9, 25, 18, 36, 45, 56, time.UTC)
+	expected := time.Date(2017, 9, 26, 02, 36, 45, 56, hkt)
+	actual, tzErr := parsetime.InTimeZone(t, hongkongName)
+	assert.Nil(test, tzErr)
+	assert.Equal(test, expected, actual)
+}
+
+func TestInTimeZone_Sydney(test *testing.T) {
+	var sydneyName = "Australia/Sydney"
+	sydney, e := time.LoadLocation(sydneyName)
+	if e != nil {
+		panic(e)
+	}
+	t := time.Date(2017, 11, 25, 11, 36, 45, 56, time.UTC)
+	expected := time.Date(2017,11, 25, 22, 36, 45, 56, sydney)
+	actual, tzErr := parsetime.InTimeZone(t, sydneyName)
+	assert.Nil(test, tzErr)
+	assert.Equal(test, expected, actual)
+}
+
+func TestInTimeZone_Sydney_Daylight(test *testing.T) {
+	var sydneyName = "Australia/Sydney"
+	sydney, e := time.LoadLocation(sydneyName)
+	if e != nil {
+		panic(e)
+	}
+	t := time.Date(2017, 6, 25, 11, 36, 45, 56, time.UTC)
+	expected := time.Date(2017,6, 25, 21, 36, 45, 56, sydney)
+	actual, tzErr := parsetime.InTimeZone(t, sydneyName)
+	assert.Nil(test, tzErr)
+	assert.Equal(test, expected, actual)
+}
+
+func TestInTimeZone_Santiago(test *testing.T) {
+	var chileName = "Chile/Continental"
+	chile, e := time.LoadLocation(chileName)
+	if e != nil {
+		panic(e)
+	}
+	t := time.Date(2017, 6, 25, 17, 36, 45, 56, time.UTC)
+	expected := time.Date(2017,6, 25, 13, 36, 45, 56, chile)
+	actual, tzErr := parsetime.InTimeZone(t, chileName)
+	assert.Nil(test, tzErr)
+	assert.Equal(test, expected, actual)
+}
+
+func TestInTimeZone_SantiagoSummer(test *testing.T) {
+	var chileName = "Chile/Continental"
+	chile, e := time.LoadLocation(chileName)
+	if e != nil {
+		panic(e)
+	}
+	t := time.Date(2017, 03, 25, 10, 36, 45, 56, time.UTC)
+	expected := time.Date(2017,03, 25, 7, 36, 45, 56, chile)
+	actual, tzErr := parsetime.InTimeZone(t, chileName)
+	assert.Nil(test, tzErr)
+	assert.Equal(test, expected, actual)
+}
+
