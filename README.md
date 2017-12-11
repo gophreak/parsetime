@@ -10,7 +10,7 @@ Download the package using glide by adding the following into your glide.yaml fi
 
 ```
 import:
-- package: github.com:gophreak/parsetime
+- package: github.com/gophreak/parsetime
   repo: git@github.com:gophreak/parsetime.git
   vcs: git
 ```
