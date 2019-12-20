@@ -1,5 +1,7 @@
 # Parsetime
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/gophreak/parsetime)](https://goreportcard.com/report/github.com/gophreak/parsetime)
+
 The parsetime package is designed as a helper to get around the obscurity of Go's time parsing. Coming from a PHP
 background I find it easier to implement the standards laid out by PHP so I have created this helper to help when parsing
 or formatting times.
