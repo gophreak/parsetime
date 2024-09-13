@@ -155,7 +155,7 @@ func TestInTimeZone_Sydney(test *testing.T) {
 		panic(e)
 	}
 	t := time.Date(2017, 11, 25, 11, 36, 45, 56, time.UTC)
-	expected := time.Date(2017,11, 25, 22, 36, 45, 56, sydney)
+	expected := time.Date(2017, 11, 25, 22, 36, 45, 56, sydney)
 	actual, tzErr := parsetime.InTimeZone(t, sydneyName)
 	assert.Nil(test, tzErr)
 	assert.Equal(test, expected, actual)
@@ -168,7 +168,7 @@ func TestInTimeZone_Sydney_Daylight(test *testing.T) {
 		panic(e)
 	}
 	t := time.Date(2017, 6, 25, 11, 36, 45, 56, time.UTC)
-	expected := time.Date(2017,6, 25, 21, 36, 45, 56, sydney)
+	expected := time.Date(2017, 6, 25, 21, 36, 45, 56, sydney)
 	actual, tzErr := parsetime.InTimeZone(t, sydneyName)
 	assert.Nil(test, tzErr)
 	assert.Equal(test, expected, actual)
@@ -181,7 +181,7 @@ func TestInTimeZone_Santiago(test *testing.T) {
 		panic(e)
 	}
 	t := time.Date(2017, 6, 25, 17, 36, 45, 56, time.UTC)
-	expected := time.Date(2017,6, 25, 13, 36, 45, 56, chile)
+	expected := time.Date(2017, 6, 25, 13, 36, 45, 56, chile)
 	actual, tzErr := parsetime.InTimeZone(t, chileName)
 	assert.Nil(test, tzErr)
 	assert.Equal(test, expected, actual)
@@ -194,7 +194,7 @@ func TestInTimeZone_SantiagoSummer(test *testing.T) {
 		panic(e)
 	}
 	t := time.Date(2017, 03, 25, 10, 36, 45, 56, time.UTC)
-	expected := time.Date(2017,03, 25, 7, 36, 45, 56, chile)
+	expected := time.Date(2017, 03, 25, 7, 36, 45, 56, chile)
 	actual, tzErr := parsetime.InTimeZone(t, chileName)
 	assert.Nil(test, tzErr)
 	assert.Equal(test, expected, actual)
@@ -208,7 +208,7 @@ func TestParseWithTimeZone(test *testing.T) {
 	}
 
 	actual, e := parsetime.ParseWithTimeZone("Y-m-d[T]H:i:s", "2017-11-24T08:39:15", southAfrica)
-	expected := time.Date(2017,11, 24, 8, 39, 15, 0, saTZ)
+	expected := time.Date(2017, 11, 24, 8, 39, 15, 0, saTZ)
 
 	assert.Nil(test, e)
 	assert.Equal(test, expected, actual)
